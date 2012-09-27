@@ -4,7 +4,7 @@ if not settings.configured:
     settings.configure(
         DEBUG=True,
         INSTALLED_APPS=(
-            'mailview',
+            'mailviews',
         ),
         DATABASES={
             'default': {
@@ -12,11 +12,11 @@ if not settings.configured:
                 'NAME': ':memory:',
             },
         },
-        ROOT_URLCONF='mailview.tests.urls',
+        ROOT_URLCONF='mailviews.tests.urls',
     )
 
 
-from mailview.tests.tests import *  # NOQA
+from mailviews.tests.tests import *  # NOQA
 
 
 def run():
@@ -24,5 +24,5 @@ def run():
     from django.test.utils import get_runner
 
     runner = get_runner(settings)()
-    failures = runner.run_tests(('mailview',))
+    failures = runner.run_tests(('mailviews',))
     sys.exit(failures)

@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import patterns, url
 
-from mailview.tests.views import preview
+from mailviews.tests.views import preview
 
 
 urlpatterns = patterns('',

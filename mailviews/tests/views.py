@@ -3,9 +3,9 @@ import random
 from django.contrib.webdesign.lorem_ipsum import paragraphs, sentence
 from django.template import Context, Template
 
-from mailview.messages import (TemplatedEmailMessageView,
+from mailviews.messages import (TemplatedEmailMessageView,
     TemplatedHTMLEmailMessageView)
-from mailview.views import render_message_to_response
+from mailviews.views import render_message_to_response
 
 
 def preview(request):

@@ -3,7 +3,7 @@ from django.core.mail.message import EmailMessage, EmailMultiAlternatives
 from django.template import Context
 from django.template.loader import get_template, select_template
 
-from mailview.utils import unescape
+from mailviews.utils import unescape
 
 
 class EmailMessageView(object):

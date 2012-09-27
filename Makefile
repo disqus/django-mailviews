@@ -1,6 +1,6 @@
 lint:
 	pip install --use-mirrors flake8
-	flake8 ./mailview
+	flake8 ./mailviews
 
 clean:
 	find . -name *.pyc -delete

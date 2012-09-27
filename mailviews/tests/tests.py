@@ -6,14 +6,14 @@ from django.core import mail
 from django.test import TestCase
 from django.template import Context, Template, TemplateDoesNotExist
 
-from mailview.messages import (TemplatedEmailMessageView,
+from mailviews.messages import (TemplatedEmailMessageView,
     TemplatedHTMLEmailMessageView)
 
 
 try:
     from django.test.utils import override_settings
 except ImportError:
-    from mailview.tests.utils import override_settings
+    from mailviews.tests.utils import override_settings
 
 
 using_test_templates = override_settings(
