@@ -2,6 +2,7 @@ from django.conf import settings
 
 if not settings.configured:
     settings.configure(
+        DEBUG=True,
         INSTALLED_APPS=(
             'mailview',
         ),
@@ -11,6 +12,7 @@ if not settings.configured:
                 'NAME': ':memory:',
             },
         },
+        ROOT_URLCONF='mailview.tests.urls',
     )
 
 

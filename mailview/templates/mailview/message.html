@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+</head>
+<body>
+
+    <header>
+
+        <h1>{{ subject }}</h1>
+
+        <div id="headers">
+
+            <h2>Headers</h2>
+
+            <dl>
+                {% for name, value in headers %}
+                    <dt>{{ name }}</dt>
+                    <dd>{{ value }}</dd>
+                {% endfor %}
+            </dl>
+
+        </div>
+
+    </header>
+
+    {% if html %}
+
+        <section id="body-html">
+
+            <h2>Body (HTML)</h2>
+
+            <iframe src="data:text/html;base64,{{ html }}"></iframe>
+
+        </section>
+
+    {% endif %}
+
+    <section id="body">
+
+        <h2>Body (Plain Text)</h2>
+
+        {{ body }}
+
+    </section>
+
+    <h2>Raw Message</h2>
+
+    <pre>
+        {{ raw }}
+    </pre>
+
+</body>
+</html>
