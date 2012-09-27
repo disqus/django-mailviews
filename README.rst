@@ -3,6 +3,13 @@ django-mailviews
 
 Class-based email views for the Django framework, including a message previewer.
 
+Introduction
+------------
+
+Rendering and sending emails in Django can quickly become repetative and
+error-prone. By encapsulating message rendering within view classes, you can
+easily compose messages in a structured and clear manner.
+
 Testing and Development
 -----------------------
 

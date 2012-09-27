@@ -1,5 +1,4 @@
-django-mailview
-===============
+.. include:: introduction.rst
 
 API Reference
 -------------
