@@ -35,7 +35,7 @@
 
     {% endif %}
 
-    <section id="body">
+    <section id="body-plain">
 
         <h2>Body (Plain Text)</h2>
 
@@ -43,11 +43,13 @@
 
     </section>
 
-    <h2>Raw Message</h2>
+    <section id="raw">
 
-    <pre>
-        {{ raw }}
-    </pre>
+        <h2>Raw Message</h2>
+
+        <pre>{{ raw }}</pre>
+
+    </section>
 
 </body>
 </html>
