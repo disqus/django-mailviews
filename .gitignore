@@ -1,3 +1,4 @@
 *.egg*
 *.py[co]
 .tox/
+docs/_build/
