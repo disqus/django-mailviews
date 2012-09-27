@@ -24,5 +24,5 @@ To view an example message preview, you can start a test server by running::
 
     $ python mailview/tests/manage.py runserver
 
-and visiting http://127.0.0.1/ for a plain text message preview, and
-http://127.0.0.1/?html for an HTML message preview.
+and visiting http://127.0.0.1:8000/ for a plain text message preview, and
+http://127.0.0.1:8000/?html for an HTML message preview.
