@@ -5,6 +5,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.core import mail
 from django.test import TestCase
 from django.template import Context, Template, TemplateDoesNotExist
+from django.template.loader import get_template
 
 from mailviews.messages import (TemplatedEmailMessageView,
     TemplatedHTMLEmailMessageView)
@@ -31,6 +32,19 @@ class EmailMessageViewTestCaseMixin(object):
         with using_test_templates:
             return super(EmailMessageViewTestCaseMixin, self).run(*args, **kwargs)
 
+    def assertTemplateExists(self, name):
+        try:
+            get_template(name)
+        except TemplateDoesNotExist:
+            raise AssertionError('Template does not exist: %s' % name)
+
+    def assertTemplateDoesNotExist(self, name):
+        try:
+            self.assertTemplateExists(name)
+        except AssertionError:
+            return
+        raise AssertionError('Template exists: %s' % name)
+
 
 class TemplatedEmailMessageViewTestCase(EmailMessageViewTestCaseMixin, TestCase):
     message_class = TemplatedEmailMessageView
@@ -49,11 +63,17 @@ class TemplatedEmailMessageViewTestCase(EmailMessageViewTestCaseMixin, TestCase)
         self.assertRaises(ImproperlyConfigured, self.render_subject)
 
     def test_subject_invalid_template_name(self):
-        self.message.subject_template_name = 'invalid.txt'
+        template = 'invalid.txt'
+        self.assertTemplateDoesNotExist(template)
+
+        self.message.subject_template_name = template
         self.assertRaises(TemplateDoesNotExist, self.render_subject)
 
     def test_subject_template_name(self):
-        self.message.subject_template_name = 'subject.txt'
+        template = 'subject.txt'
+        self.assertTemplateExists(template)
+
+        self.message.subject_template_name = template
         self.assertEqual(self.render_subject(), self.value)
 
     def test_subject_template(self):
@@ -64,11 +84,17 @@ class TemplatedEmailMessageViewTestCase(EmailMessageViewTestCaseMixin, TestCase)
         self.assertRaises(ImproperlyConfigured, self.render_body)
 
     def test_body_invalid_template_name(self):
-        self.message.body_template_name = 'invalid.txt'
+        template = 'invalid.txt'
+        self.assertTemplateDoesNotExist(template)
+
+        self.message.body_template_name = template
         self.assertRaises(TemplateDoesNotExist, self.render_body)
 
     def test_body_template_name(self):
-        self.message.body_template_name = 'body.txt'
+        template = 'body.txt'
+        self.assertTemplateExists(template)
+
+        self.message.body_template_name = template
         self.assertEqual(self.render_body(), self.value + '\n')
 
     def test_body_template(self):
@@ -107,11 +133,17 @@ class TemplatedHTMLEmailMessageViewTestCase(TemplatedEmailMessageViewTestCase):
         self.assertRaises(ImproperlyConfigured, self.render_html_body)
 
     def test_html_body_invalid_template_name(self):
-        self.message.html_body_template_name = 'invalid.txt'
+        template = 'invalid.txt'
+        self.assertTemplateDoesNotExist(template)
+
+        self.message.html_body_template_name = template
         self.assertRaises(TemplateDoesNotExist, self.render_html_body)
 
     def test_html_body_template_name(self):
-        self.message.html_body_template_name = 'body.html'
+        template = 'body.html'
+        self.assertTemplateExists(template)
+
+        self.message.html_body_template_name = template
         self.assertEqual(self.render_html_body(), self.value + '\n')
 
     def test_html_body_template(self):
