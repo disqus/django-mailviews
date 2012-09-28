@@ -17,4 +17,4 @@ publish: lint test-matrix
 	git push --tags
 	python setup.py sdist upload -r disqus
 
-.PHONY: clean lint test publish
+.PHONY: clean lint test test-matrix publish
