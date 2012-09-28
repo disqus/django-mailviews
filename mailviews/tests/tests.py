@@ -45,7 +45,7 @@ class TemplatedEmailMessageViewTestCase(EmailMessageViewTestCaseMixin, TestCase)
         self.render_body = functools.partial(self.message.render_body,
             context=self.context)
 
-    def test_subject_template_inconfigured(self):
+    def test_subject_template_unconfigured(self):
         self.assertRaises(ImproperlyConfigured, self.render_subject)
 
     def test_subject_invalid_template_name(self):
@@ -60,7 +60,7 @@ class TemplatedEmailMessageViewTestCase(EmailMessageViewTestCaseMixin, TestCase)
         self.message.subject_template = Template('{{ value }}')
         self.assertEqual(self.render_subject(), self.value)
 
-    def test_body_template_inconfigured(self):
+    def test_body_template_unconfigured(self):
         self.assertRaises(ImproperlyConfigured, self.render_body)
 
     def test_body_invalid_template_name(self):
@@ -103,7 +103,7 @@ class TemplatedHTMLEmailMessageViewTestCase(TemplatedEmailMessageViewTestCase):
         self.render_html_body = functools.partial(self.message.render_html_body,
             context=self.context)
 
-    def test_html_body_template_inconfigured(self):
+    def test_html_body_template_unconfigured(self):
         self.assertRaises(ImproperlyConfigured, self.render_html_body)
 
     def test_html_body_invalid_template_name(self):
