@@ -30,4 +30,5 @@ def render_message_to_response(request, message):
     except StopIteration:
         pass
 
-    return direct_to_template(request, 'mailviews/message.html', extra_context=context)
+    return direct_to_template(request, 'mailviews/message.html',
+        extra_context=context)

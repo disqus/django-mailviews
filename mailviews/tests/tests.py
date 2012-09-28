@@ -14,7 +14,7 @@ from mailviews.messages import (TemplatedEmailMessageView,
 try:
     from django.test.utils import override_settings
 except ImportError:
-    from mailviews.tests.utils import override_settings
+    from mailviews.tests.utils import override_settings  # noqa
 
 
 using_test_templates = override_settings(
@@ -27,10 +27,10 @@ using_test_templates = override_settings(
 )
 
 
-class EmailMessageViewTestCaseMixin(object):
+class EmailMessageViewTestCase(TestCase):
     def run(self, *args, **kwargs):
         with using_test_templates:
-            return super(EmailMessageViewTestCaseMixin, self).run(*args, **kwargs)
+            return super(EmailMessageViewTestCase, self).run(*args, **kwargs)
 
     def assertTemplateExists(self, name):
         try:
@@ -49,7 +49,7 @@ class EmailMessageViewTestCaseMixin(object):
         self.assertEqual(len(mail.outbox), length)
 
 
-class TemplatedEmailMessageViewTestCase(EmailMessageViewTestCaseMixin, TestCase):
+class TemplatedEmailMessageViewTestCase(EmailMessageViewTestCase):
     message_class = TemplatedEmailMessageView
 
     def setUp(self):
@@ -144,7 +144,8 @@ class TemplatedHTMLEmailMessageViewTestCase(TemplatedEmailMessageViewTestCase):
         self.context_dict['html'] = self.html_body
         self.context['html'] = self.html_body
 
-        self.render_html_body = functools.partial(self.message.render_html_body,
+        self.render_html_body = functools.partial(
+            self.message.render_html_body,
             context=self.context)
 
     def test_html_body_template_unconfigured(self):

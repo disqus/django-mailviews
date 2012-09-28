@@ -29,7 +29,7 @@ class EmailMessageView(object):
 
     def render_to_message(self, context, **kwargs):
         """
-        Renders and returns a message with the given context without sending it.
+        Renders and returns an unsent message with the provided context.
 
         Any extra keyword arguments passed will be passed through as keyword
         arguments to the message constructor.
@@ -92,17 +92,19 @@ class TemplatedEmailMessageView(EmailMessageView):
             return self._subject_template
 
         if self.subject_template_name is None:
-            raise ImproperlyConfigured('A subject template name must be provided.')
+            raise ImproperlyConfigured('A `subject_template` or '
+                '`subject_template_name` must be provided to render this '
+                'message subject.')
 
         return self._get_template(self.subject_template_name)
 
     def _set_subject_template(self, template):
         self._subject_template = template
 
-    #: Returns the subject template that will be used for rendering this message.
-    #: If the subject template has been explicitly set, that template will be
-    #: used. If not, the template(s) defined as :attr:`.subject_template_name`
-    #: will be used instead.
+    #: Returns the subject template that will be used for rendering this
+    #: message. If the subject template has been explicitly set, that template
+    #: will be used. If not, the template(s) defined as
+    #: :attr:`.subject_template_name` will be used instead.
     subject_template = property(_get_subject_template, _set_subject_template)
 
     def _get_body_template(self):
@@ -110,7 +112,9 @@ class TemplatedEmailMessageView(EmailMessageView):
             return self._body_template
 
         if self.body_template_name is None:
-            raise ImproperlyConfigured('A body template filename must be provided.')
+            raise ImproperlyConfigured('A `body_template` or '
+                '`body_template_name` must be provided to render this '
+                'message subject.')
 
         return self._get_template(self.body_template_name)
 
@@ -170,7 +174,9 @@ class TemplatedHTMLEmailMessageView(TemplatedEmailMessageView):
             return self._html_body_template
 
         if self.html_body_template_name is None:
-            raise ImproperlyConfigured('A HTML template must be provided.')
+            raise ImproperlyConfigured('An `html_body_template` or '
+                '`html_body_template_name` must be provided to render this '
+                'message HTML body.')
 
         return self._get_template(self.html_body_template_name)
 
@@ -181,7 +187,8 @@ class TemplatedHTMLEmailMessageView(TemplatedEmailMessageView):
     #: of this message. If the HTML body template has been explicitly set, that
     #: template will be used. If not, the template(s) defined as
     #: :attr:`.html_body_template_name` will be used instead.
-    html_body_template = property(_get_html_body_template, _set_html_body_template)
+    html_body_template = property(_get_html_body_template,
+        _set_html_body_template)
 
     def render_html_body(self, context):
         """
@@ -196,7 +203,7 @@ class TemplatedHTMLEmailMessageView(TemplatedEmailMessageView):
 
     def render_to_message(self, context, *args, **kwargs):
         """
-        Renders and returns a message with the given context without sending it.
+        Renders and returns an unsent message with the given context.
 
         Any extra keyword arguments passed will be passed through as keyword
         arguments to the message constructor.
@@ -206,6 +213,9 @@ class TemplatedHTMLEmailMessageView(TemplatedEmailMessageView):
         :returns: A message instance.
         :rtype: :attr:`.message_class`
         """
-        message = super(TemplatedHTMLEmailMessageView, self).render_to_message(context, *args, **kwargs)
-        message.attach_alternative(content=self.render_html_body(context), mimetype='text/html')
+        message = super(TemplatedHTMLEmailMessageView, self)\
+            .render_to_message(context, *args, **kwargs)
+
+        content = self.render_html_body(context)
+        message.attach_alternative(content, mimetype='text/html')
         return message
