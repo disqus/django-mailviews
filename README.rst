@@ -28,6 +28,49 @@ Basic Usage
         'user': user,
     }, to=(user.email,))
 
+This isn't actually the best pattern for sending messages to a user -- read the
+notes under "Best Practices" for a better approach.
+
+Best Practices
+--------------
+
+* Keep all of your message view subclasses in an ``emails`` module in your
+  application.
+* Try and avoid using the ``extra_context`` argument when sending emails.
+  Instead, create an ``EmailMessageView`` subclass whose constructor accepts
+  as arguments all of the objects that you require to generate the context and
+  send the message. For example, the code shown in "Basic Usage" could written
+  instead as the following:
+
+.. code:: python
+
+    from mailviews.messages import EmailMessageView
+
+    class WelcomeMessageView(EmailMessageView):
+        subject_template_name = 'emails/welcome/subject.txt'
+        body_template_name = 'emails/welcome/body.txt'
+
+        def __init__(self, user, *args, **kwargs):
+            super(WelcomeMessageView, self).__init__(*args, **kwargs)
+            self.user = user
+
+        def get_context_data(self, **kwargs):
+            context = super(WelcomeMessageView, self).get_context_data(**kwargs)
+            context['user'] = self.user
+            return context
+
+        def send(self, *args, **kwargs):
+            assert 'to' not in kwargs  # this should only be sent to the user
+            kwargs['to'] = (self.user.email,)
+            super(WelcomeMessageView, self).send(*args, **kwargs)
+
+    # Instantiate and send a message.
+    WelcomeMessageView(user).send()
+
+In fact, you might find it helpful to encapsulate the above "message for a user"
+pattern into a mixin or subclass that provides a standard abstraction for all
+user-related emails. (This is left as an exercise for the reader.)
+
 Testing and Development
 -----------------------
 
