@@ -8,4 +8,9 @@ clean:
 test: clean
 	python setup.py test
 
-.PHONY: clean lint test
+publish: lint tests
+	git tag $$(python setup.py --version)
+	git push --tags
+	python setup.py sdist upload -r disqus
+
+.PHONY: clean lint test publish
