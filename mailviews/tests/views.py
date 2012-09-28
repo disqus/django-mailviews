@@ -1,7 +1,7 @@
 import random
 
 from django.contrib.webdesign.lorem_ipsum import paragraphs, sentence
-from django.template import Context, Template
+from django.template import Template
 
 from mailviews.messages import (TemplatedEmailMessageView,
     TemplatedHTMLEmailMessageView)
@@ -22,8 +22,8 @@ def preview(request):
     if html:
         message_view.html_body_template = Template('{{ content|linebreaks }}')
 
-    message = message_view.render_to_message(Context({
+    message = message_view.render_to_message(extra_context={
         'subject': sentence(),
         'content': '\n'.join(paragraphs(random.randint(3, 6))),
-    }))
+    })
     return render_message_to_response(request, message)

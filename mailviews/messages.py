@@ -27,18 +27,23 @@ class EmailMessageView(object):
         """
         return Context(kwargs)
 
-    def render_to_message(self, context, **kwargs):
+    def render_to_message(self, extra_context=None, **kwargs):
         """
         Renders and returns an unsent message with the provided context.
 
         Any extra keyword arguments passed will be passed through as keyword
         arguments to the message constructor.
 
-        :param context: The context to use when rendering templated content.
-        :type context: :class:`~django.template.Context`
+        :param extra_context: Any additional context to use when rendering the
+            templated content.
+        :type extra_context: :class:`dict`
         :returns: A message instance.
         :rtype: :attr:`.message_class`
         """
+        if extra_context is None:
+            extra_context = {}
+
+        context = self.get_context_data(**extra_context)
         return self.message_class(
             subject=self.render_subject(context),
             body=self.render_body(context),
@@ -48,19 +53,21 @@ class EmailMessageView(object):
         """
         Renders and sends an email message.
 
-        All keyword arguments other than ``context`` are passed through as
-        keyword arguments when constructing a new :attr:`message_class`
+        All keyword arguments other than ``extra_context`` are passed through
+        as keyword arguments when constructing a new :attr:`message_class`
         instance for this message.
+
+        This method exists primarily for convenience, and the proper
+        rendering of your message should not depend on the behavior of this
+        method. To alter how a message is created, override
+        :meth:``render_to_message`` instead, since that should always be
+        called, even if a message is not sent.
 
         :param extra_context: Any additional context data that will be used
             when rendering this message.
         :type extra_context: :class:`dict`
         """
-        if extra_context is None:
-            extra_context = {}
-
-        context = self.get_context_data(**extra_context)
-        message = self.render_to_message(context, **kwargs)
+        message = self.render_to_message(extra_context=extra_context, **kwargs)
         return message.send()
 
 
@@ -201,21 +208,26 @@ class TemplatedHTMLEmailMessageView(TemplatedEmailMessageView):
         """
         return self.html_body_template.render(context)
 
-    def render_to_message(self, context, *args, **kwargs):
+    def render_to_message(self, extra_context=None, *args, **kwargs):
         """
         Renders and returns an unsent message with the given context.
 
         Any extra keyword arguments passed will be passed through as keyword
         arguments to the message constructor.
 
-        :param context: The context to use when rendering templated content.
-        :type context: :class:`~django.template.Context`
+        :param extra_context: Any additional context to use when rendering
+            templated content.
+        :type extra_context: :class:`dict`
         :returns: A message instance.
         :rtype: :attr:`.message_class`
         """
         message = super(TemplatedHTMLEmailMessageView, self)\
-            .render_to_message(context, *args, **kwargs)
+            .render_to_message(extra_context, *args, **kwargs)
 
+        if extra_context is None:
+            extra_context = {}
+
+        context = self.get_context_data(**extra_context)
         content = self.render_html_body(context)
         message.attach_alternative(content, mimetype='text/html')
         return message

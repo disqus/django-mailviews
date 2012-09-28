@@ -121,7 +121,7 @@ class TemplatedEmailMessageViewTestCase(EmailMessageViewTestCase):
         self.message.subject_template = self.subject_template
         self.message.body_template = self.body_template
 
-        message = self.message.render_to_message(self.context)
+        message = self.message.render_to_message(self.context_dict)
         self.assertEqual(message.subject, self.subject)
         self.assertEqual(message.body, self.body)
 
@@ -174,7 +174,7 @@ class TemplatedHTMLEmailMessageViewTestCase(TemplatedEmailMessageViewTestCase):
         self.message.body_template = self.body_template
         self.message.html_body_template = self.html_body_template
 
-        message = self.message.render_to_message(self.context)
+        message = self.message.render_to_message(self.context_dict)
         self.assertEqual(message.subject, self.subject)
         self.assertEqual(message.body, self.body)
         self.assertEqual(message.alternatives, [(self.html_body, 'text/html')])
