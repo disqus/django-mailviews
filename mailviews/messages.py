@@ -54,7 +54,7 @@ class EmailMessageView(object):
 
         :param extra_context: Any additional context data that will be used
             when rendering this message.
-        :type context: :class:`dict`
+        :type extra_context: :class:`dict`
         """
         if extra_context is None:
             extra_context = {}
