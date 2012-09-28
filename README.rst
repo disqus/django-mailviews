@@ -10,6 +10,24 @@ Rendering and sending emails in Django can quickly become repetative and
 error-prone. By encapsulating message rendering within view classes, you can
 easily compose messages in a structured and clear manner.
 
+Basic Usage
+-----------
+
+.. code:: python
+
+    from mailviews.messages import EmailMessageView
+
+    # Subclass the `EmailMessageView`, adding the templates you want to render.
+    class WelcomeMessageView(EmailMessageView):
+        subject_template_name = 'emails/welcome/subject.txt'
+        body_template_name = 'emails/welcome/body.txt'
+
+    # Instantiate and send a message.
+    message = WelcomeMessageView()
+    message.send(extra_context={
+        'user': user,
+    }, to=(user.email,))
+
 Testing and Development
 -----------------------
 
