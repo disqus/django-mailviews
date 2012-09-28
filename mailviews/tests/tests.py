@@ -50,9 +50,22 @@ class TemplatedEmailMessageViewTestCase(EmailMessageViewTestCaseMixin, TestCase)
     message_class = TemplatedEmailMessageView
 
     def setUp(self):
-        self.value = 'Hello, world!'
-        self.context = Context({'value': self.value})
         self.message = self.message_class()
+
+        self.template = 'Hello, world!'
+
+        self.subject = 'subject'
+        self.subject_template = Template('{{ subject }}')
+
+        self.body = 'body'
+        self.body_template = Template('{{ body }}')
+
+        self.context_dict = {
+            'subject': self.subject,
+            'body': self.body,
+        }
+
+        self.context = Context(self.context_dict)
 
         self.render_subject = functools.partial(self.message.render_subject,
             context=self.context)
@@ -74,11 +87,11 @@ class TemplatedEmailMessageViewTestCase(EmailMessageViewTestCaseMixin, TestCase)
         self.assertTemplateExists(template)
 
         self.message.subject_template_name = template
-        self.assertEqual(self.render_subject(), self.value)
+        self.assertEqual(self.render_subject(), self.subject)
 
     def test_subject_template(self):
-        self.message.subject_template = Template('{{ value }}')
-        self.assertEqual(self.render_subject(), self.value)
+        self.message.subject_template = self.subject_template
+        self.assertEqual(self.render_subject(), self.subject)
 
     def test_body_template_unconfigured(self):
         self.assertRaises(ImproperlyConfigured, self.render_body)
@@ -95,28 +108,24 @@ class TemplatedEmailMessageViewTestCase(EmailMessageViewTestCaseMixin, TestCase)
         self.assertTemplateExists(template)
 
         self.message.body_template_name = template
-        self.assertEqual(self.render_body(), self.value + '\n')
+        self.assertEqual(self.render_body(), self.body + '\n')
 
     def test_body_template(self):
-        self.message.body_template = Template('{{ value }}')
-        self.assertEqual(self.render_body(), self.value)
+        self.message.body_template = self.body_template
+        self.assertEqual(self.render_body(), self.body)
 
     def test_render_to_message(self):
-        template = Template('{{ value }}')
-        self.message.subject_template = template
-        self.message.body_template = template
+        self.message.subject_template = self.subject_template
+        self.message.body_template = self.body_template
 
         message = self.message.render_to_message(self.context)
-        self.assertEqual(message.subject, self.value)
-        self.assertEqual(message.body, self.value)
+        self.assertEqual(message.subject, self.subject)
+        self.assertEqual(message.body, self.body)
 
     def test_send(self):
-        template = Template('{{ value }}')
-        self.message.subject_template = template
-        self.message.body_template = template
-
-        extra_context = {'value': self.value}
-        self.message.send(extra_context, to=('ted@disqus.com',))
+        self.message.subject_template = self.subject_template
+        self.message.body_template = self.body_template
+        self.message.send(self.context_dict, to=('ted@disqus.com',))
 
         self.assertEqual(len(mail.outbox), 1)
 
@@ -126,6 +135,13 @@ class TemplatedHTMLEmailMessageViewTestCase(TemplatedEmailMessageViewTestCase):
 
     def setUp(self):
         super(TemplatedHTMLEmailMessageViewTestCase, self).setUp()
+
+        self.html_body = 'html body'
+        self.html_body_template = Template('{{ html }}')
+
+        self.context_dict['html'] = self.html_body
+        self.context['html'] = self.html_body
+
         self.render_html_body = functools.partial(self.message.render_html_body,
             context=self.context)
 
@@ -144,30 +160,27 @@ class TemplatedHTMLEmailMessageViewTestCase(TemplatedEmailMessageViewTestCase):
         self.assertTemplateExists(template)
 
         self.message.html_body_template_name = template
-        self.assertEqual(self.render_html_body(), self.value + '\n')
+        self.assertEqual(self.render_html_body(), self.html_body + '\n')
 
     def test_html_body_template(self):
-        self.message.html_body_template = Template('{{ value }}')
-        self.assertEqual(self.render_html_body(), self.value)
+        self.message.html_body_template = self.html_body_template
+        self.assertEqual(self.render_html_body(), self.html_body)
 
     def test_render_to_message(self):
-        template = Template('{{ value }}')
-        self.message.subject_template = template
-        self.message.body_template = template
-        self.message.html_body_template = template
+        self.message.subject_template = self.subject_template
+        self.message.body_template = self.body_template
+        self.message.html_body_template = self.html_body_template
 
         message = self.message.render_to_message(self.context)
-        self.assertEqual(message.subject, self.value)
-        self.assertEqual(message.body, self.value)
-        self.assertEqual(message.alternatives, [(self.value, 'text/html')])
+        self.assertEqual(message.subject, self.subject)
+        self.assertEqual(message.body, self.body)
+        self.assertEqual(message.alternatives, [(self.html_body, 'text/html')])
 
     def test_send(self):
-        template = Template('{{ value }}')
-        self.message.subject_template = template
-        self.message.body_template = template
-        self.message.html_body_template = template
+        self.message.subject_template = self.subject_template
+        self.message.body_template = self.body_template
+        self.message.html_body_template = self.html_body_template
 
-        extra_context = {'value': self.value}
-        self.message.send(extra_context, to=('ted@disqus.com',))
+        self.message.send(self.context_dict, to=('ted@disqus.com',))
 
         self.assertEqual(len(mail.outbox), 1)
