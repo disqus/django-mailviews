@@ -59,10 +59,10 @@ Best Practices
             context['user'] = self.user
             return context
 
-        def send(self, *args, **kwargs):
+        def render_to_message(self, *args, **kwargs):
             assert 'to' not in kwargs  # this should only be sent to the user
             kwargs['to'] = (self.user.email,)
-            super(WelcomeMessageView, self).send(*args, **kwargs)
+            return super(WelcomeMessageView, self).render_to_message(*args, **kwargs)
 
     # Instantiate and send a message.
     WelcomeMessageView(user).send()
