@@ -45,7 +45,7 @@ class EmailMessageViewTestCaseMixin(object):
             return
         raise AssertionError('Template exists: %s' % name)
 
-    def assertOutboxLengthIs(self, length):
+    def assertOutboxLengthEquals(self, length):
         self.assertEqual(len(mail.outbox), length)
 
 
@@ -129,7 +129,7 @@ class TemplatedEmailMessageViewTestCase(EmailMessageViewTestCaseMixin, TestCase)
         self.message.subject_template = self.subject_template
         self.message.body_template = self.body_template
         self.message.send(self.context_dict, to=('ted@disqus.com',))
-        self.assertOutboxLengthIs(1)
+        self.assertOutboxLengthEquals(1)
 
 
 class TemplatedHTMLEmailMessageViewTestCase(TemplatedEmailMessageViewTestCase):
@@ -183,4 +183,4 @@ class TemplatedHTMLEmailMessageViewTestCase(TemplatedEmailMessageViewTestCase):
         self.message.body_template = self.body_template
         self.message.html_body_template = self.html_body_template
         self.message.send(self.context_dict, to=('ted@disqus.com',))
-        self.assertOutboxLengthIs(1)
+        self.assertOutboxLengthEquals(1)
