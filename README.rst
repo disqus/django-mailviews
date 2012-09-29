@@ -84,9 +84,7 @@ All tests will automatically be run using the Django test runner when you run
 the tests for your own projects if you use ``python manage.py test`` and
 ``mailviews`` is within your ``settings.INSTALLED_APPS``.
 
-To run tests against the entire build matrix, install
-`tox <http://pypi.python.org/pypi/tox>`_ and run ``tox`` in the root of the
-repository.
+To run tests against the entire build matrix, run ``make test-matrix``.
 
 To view an example message preview, you can start a test server by running::
 
