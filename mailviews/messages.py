@@ -13,6 +13,15 @@ class EmailMessageView(object):
     """
     message_class = EmailMessage
 
+    @property
+    def headers(self):
+        """
+        A dictionary containing the headers for this message.
+        """
+        if not hasattr(self, '_headers'):
+            self._headers = {}
+        return self._headers
+
     def render_subject(self, context):
         raise NotImplementedError  # Must be implemented by subclasses.
 
@@ -42,6 +51,9 @@ class EmailMessageView(object):
         """
         if extra_context is None:
             extra_context = {}
+
+        # Ensure our custom headers are added to the underlying message class.
+        kwargs.setdefault('headers', {}).update(self.headers)
 
         context = self.get_context_data(**extra_context)
         return self.message_class(
