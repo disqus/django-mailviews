@@ -75,6 +75,13 @@ class TemplatedEmailMessageViewTestCase(EmailMessageViewTestCase):
         self.render_body = functools.partial(self.message.render_body,
             context=self.context)
 
+    def add_templates_to_message(self):
+        """
+        Adds templates to the fixture message, ensuring it can be rendered.
+        """
+        self.message.subject_template = self.subject_template
+        self.message.body_template = self.body_template
+
     def test_subject_template_unconfigured(self):
         self.assertRaises(ImproperlyConfigured, self.render_subject)
 
@@ -118,18 +125,30 @@ class TemplatedEmailMessageViewTestCase(EmailMessageViewTestCase):
         self.assertEqual(self.render_body(), self.body)
 
     def test_render_to_message(self):
-        self.message.subject_template = self.subject_template
-        self.message.body_template = self.body_template
-
+        self.add_templates_to_message()
         message = self.message.render_to_message(self.context_dict)
         self.assertEqual(message.subject, self.subject)
         self.assertEqual(message.body, self.body)
 
     def test_send(self):
-        self.message.subject_template = self.subject_template
-        self.message.body_template = self.body_template
+        self.add_templates_to_message()
         self.message.send(self.context_dict, to=('ted@disqus.com',))
         self.assertOutboxLengthEquals(1)
+
+    def test_custom_headers(self):
+        self.add_templates_to_message()
+        address = 'ted@disqus.com'
+        self.message.headers['Reply-To'] = address
+        self.assertEqual(self.message.headers['Reply-To'], address)
+
+        rendered = self.message.render_to_message()
+        self.assertEqual(rendered.extra_headers['Reply-To'], address)
+
+        rendered = self.message.render_to_message(headers={
+            'References': 'foo',
+        })
+        self.assertEqual(rendered.extra_headers['Reply-To'], address)
+        self.assertEqual(rendered.extra_headers['References'], 'foo')
 
 
 class TemplatedHTMLEmailMessageViewTestCase(TemplatedEmailMessageViewTestCase):
@@ -147,6 +166,13 @@ class TemplatedHTMLEmailMessageViewTestCase(TemplatedEmailMessageViewTestCase):
         self.render_html_body = functools.partial(
             self.message.render_html_body,
             context=self.context)
+
+    def add_templates_to_message(self):
+        """
+        Adds templates to the fixture message, ensuring it can be rendered.
+        """
+        super(TemplatedHTMLEmailMessageViewTestCase, self).add_templates_to_message()
+        self.message.html_body_template = self.html_body_template
 
     def test_html_body_template_unconfigured(self):
         self.assertRaises(ImproperlyConfigured, self.render_html_body)
@@ -170,18 +196,13 @@ class TemplatedHTMLEmailMessageViewTestCase(TemplatedEmailMessageViewTestCase):
         self.assertEqual(self.render_html_body(), self.html_body)
 
     def test_render_to_message(self):
-        self.message.subject_template = self.subject_template
-        self.message.body_template = self.body_template
-        self.message.html_body_template = self.html_body_template
-
+        self.add_templates_to_message()
         message = self.message.render_to_message(self.context_dict)
         self.assertEqual(message.subject, self.subject)
         self.assertEqual(message.body, self.body)
         self.assertEqual(message.alternatives, [(self.html_body, 'text/html')])
 
     def test_send(self):
-        self.message.subject_template = self.subject_template
-        self.message.body_template = self.body_template
-        self.message.html_body_template = self.html_body_template
+        self.add_templates_to_message()
         self.message.send(self.context_dict, to=('ted@disqus.com',))
         self.assertOutboxLengthEquals(1)
