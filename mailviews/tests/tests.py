@@ -171,7 +171,8 @@ class TemplatedHTMLEmailMessageViewTestCase(TemplatedEmailMessageViewTestCase):
         """
         Adds templates to the fixture message, ensuring it can be rendered.
         """
-        super(TemplatedHTMLEmailMessageViewTestCase, self).add_templates_to_message()
+        super(TemplatedHTMLEmailMessageViewTestCase, self)\
+            .add_templates_to_message()
         self.message.html_body_template = self.html_body_template
 
     def test_html_body_template_unconfigured(self):
