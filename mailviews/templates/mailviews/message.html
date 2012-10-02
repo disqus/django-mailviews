@@ -1,6 +1,21 @@
 <!doctype html>
 <html lang="en">
 <head>
+
+    <style type="text/css">
+
+        iframe {
+            min-height: 450px;
+            width: 100%;
+        }
+
+        textarea {
+            min-height: 250px;
+            width: 100%;
+        }
+
+    </style>
+
 </head>
 <body>
 
@@ -27,9 +42,16 @@
 
         <section id="body-html">
 
-            <h2>Body (HTML)</h2>
+            <h2>HTML Body (Preview)</h2>
 
-            <iframe src="data:text/html;base64,{{ html }}"></iframe>
+            <iframe src="data:text/html;base64,{{ escaped_html }}"></iframe>
+
+        </section>
+
+        <section "html-raw">
+
+            <h2>HTML Body (Raw)</h2>
+            <textarea>{{ html|escape }}</textarea>
 
         </section>
 
@@ -37,7 +59,7 @@
 
     <section id="body-plain">
 
-        <h2>Body (Plain Text)</h2>
+        <h2>Body (Text)</h2>
 
         {{ body|linebreaks }}
 

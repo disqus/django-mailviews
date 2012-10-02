@@ -26,7 +26,10 @@ def render_message_to_response(request, message):
     try:
         html = next(alternative[0] for alternative in alternatives
             if alternative[1] == 'text/html')
-        context['html'] = b64encode(html)
+        context.update({
+            'html': html,
+            'escaped_html': b64encode(html),
+        })
     except StopIteration:
         pass
 
