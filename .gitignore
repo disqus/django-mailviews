@@ -1,5 +1,6 @@
 *.egg*
 *.py[co]
+.env
 .tox/
 dist/
 docs/_build/

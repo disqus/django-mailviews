@@ -86,9 +86,6 @@ the tests for your own projects if you use ``python manage.py test`` and
 
 To run tests against the entire build matrix, run ``make test-matrix``.
 
-To view an example message preview, you can start a test server by running::
-
-    $ python mailviews/tests/manage.py runserver
-
-and visiting http://127.0.0.1:8000/ for a plain text message preview, and
-http://127.0.0.1:8000/?html for an HTML message preview.
+To view an example message preview, you can start a test server by running
+``make test-server`` and visiting http://127.0.0.1:8000/ for a plain text
+message preview, and http://127.0.0.1:8000/?html for an HTML message preview.

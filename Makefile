@@ -1,3 +1,6 @@
+develop:
+	python setup.py develop
+
 lint:
 	pip install --use-mirrors flake8
 	flake8 ./mailviews
@@ -12,9 +15,12 @@ test-matrix: clean
 	pip install --use-mirrors tox
 	tox
 
+test-server: develop
+	python mailviews/tests/manage.py runserver
+
 publish: lint test-matrix
 	git tag $$(python setup.py --version)
 	git push --tags
 	python setup.py sdist upload -r disqus
 
-.PHONY: clean lint test test-matrix publish
+.PHONY: clean lint test test-matrix test-server publish
