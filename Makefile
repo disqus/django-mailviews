@@ -12,7 +12,7 @@ test: clean
 	python setup.py test
 
 test-matrix: clean
-	pip install --use-mirrors tox
+	which tox >/dev/null || pip install --use-mirrors tox
 	tox
 
 test-server: develop
