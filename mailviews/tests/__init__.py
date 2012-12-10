@@ -13,6 +13,7 @@ if not settings.configured:
             },
         },
         ROOT_URLCONF='mailviews.tests.urls',
+        STATIC_URL='/static/',
     )
 
 

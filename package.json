@@ -1,0 +1,16 @@
+{
+  "name": "django-mailviews",
+  "version": "0.0.0",
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/disqus/django-mailviews.git"
+  },
+  "author": "disqus",
+  "license": "apache license 2.0",
+  "readmeFilename": "README.rst",
+  "dependencies": {
+    "less": "1.3.1",
+    "jshint": "0.8.0"
+  }
+}

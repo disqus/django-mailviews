@@ -1,0 +1,26 @@
+body {
+    padding-top: 60px;
+}
+
+#html iframe,
+#html textarea {
+    border: 0;
+    height: 700px;
+    width: 100%;
+}
+
+#html textarea {
+    font-family: monospace;
+    padding: 0;
+}
+
+section {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+
+section.last {
+    border-bottom: 0;
+    padding-bottom: 0;
+}
