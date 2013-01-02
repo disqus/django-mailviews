@@ -1,0 +1,26 @@
+{% extends "mailviews/base.html" %}
+
+{% block container-class %}preview list{% endblock %}
+
+{% block content %}
+
+    <section id="message-list">
+
+        {% for module, previews in registry.items %}
+
+            <h2><small>{{ module }}</small></h2>
+
+            <table class="table">
+                {% for preview in previews.values %}
+                    <tr>
+                        <th><a href="{{ preview.url }}">{{ preview }}</a></th>
+                        <td class="description">{{ preview.description }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+
+        {% endfor %}
+
+    </div>
+
+{% endblock %}

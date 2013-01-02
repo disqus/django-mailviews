@@ -5,6 +5,7 @@ if not settings.configured:
         DEBUG=True,
         INSTALLED_APPS=(
             'mailviews',
+            'mailviews.tests',
         ),
         DATABASES={
             'default': {
@@ -14,6 +15,22 @@ if not settings.configured:
         },
         ROOT_URLCONF='mailviews.tests.urls',
         STATIC_URL='/static/',
+        LOGGING={
+            'version': 1,
+            'disable_existing_loggers': False,
+            'handlers': {
+                'console': {
+                    'level': 'DEBUG',
+                    'class': 'logging.StreamHandler',
+                },
+            },
+            'loggers': {
+                '': {
+                    'handler': ['console'],
+                    'level': 'DEBUG',
+                },
+            },
+        },
     )
 
 

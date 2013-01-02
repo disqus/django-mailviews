@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+    {% load mailviews %}
+
+    <link rel="stylesheet" type="text/css" href="{% mailviews_static 'mailviews/css/bootstrap.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% mailviews_static 'mailviews/css/mailviews.css' %}" />
+
+    <script type="text/javascript" src="{% mailviews_static 'mailviews/javascript/jquery.js' %}"></script>
+    <script type="text/javascript" src="{% mailviews_static 'mailviews/javascript/bootstrap-tab.js' %}"></script>
+
+</head>
+<body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="{% url mailviews-preview-list %}">Message Preview</a>
+          {% block navigation %}{% endblock %}
+        </div>
+      </div>
+    </div>
+
+    <div class="container {% block container-class %}{% endblock %}">
+
+        {% block content %}
+        {% endblock %}
+
+    </div>
+
+</body>
+</html>

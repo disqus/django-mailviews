@@ -7,7 +7,6 @@ from functools import wraps
 from django.conf import settings, UserSettingsHolder
 
 
-
 class override_settings(object):
     """
     Acts as either a decorator, or a context manager. If it's a decorator it

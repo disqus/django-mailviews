@@ -1,6 +1,10 @@
 from django.template import Context
 
 
+def unimplemented(*args, **kwargs):
+    raise NotImplementedError
+
+
 def unescape(context):
     """
     Accepts a context object, returning a new context with autoescape off.

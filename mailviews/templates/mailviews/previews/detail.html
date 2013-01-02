@@ -1,0 +1,92 @@
+{% extends "mailviews/base.html" %}
+
+{% block container-class %}preview detail{% endblock %}
+
+{% block navigation %}
+
+    <div class="nav-collapse collapse">
+        <ul class="nav">
+            {% if html %}
+                <li><a href="#html">HTML</a></li>
+            {% endif %}
+            <li><a href="#body-plain">Text</a></li>
+            <li><a href="#raw">Raw</a></li>
+        </ul>
+    </div>
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="page-header">
+        <h2>
+            {{ preview }}
+            <small>{{ preview.module }}</small>
+        </h2>
+    </div>
+
+    <header>
+
+        <div id="headers">
+
+            <table class="table table-condensed">
+                {% for name, value in headers.items %}
+                    <tr class="{{ name|slugify }}">
+                        <th>{{ name }}</th>
+                        <td>{{ value }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+
+        </div>
+
+    </header>
+
+    {% if html %}
+
+    <div id="html">
+
+        <h3>HTML</h3>
+
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#body-html" data-toggle="tab">Preview</a></li>
+            <li><a href="#html-raw" data-toggle="tab">Source</a></li>
+        </ul>
+
+        <div class="tab-content">
+
+            <section id="body-html" class="tab-pane active">
+                <iframe src="data:text/html;base64,{{ escaped_html }}" frameborder="0" allowtransparency="true"></iframe>
+            </section>
+
+            <section id="html-raw" class="tab-pane">
+                <textarea>{{ html|escape }}</textarea>
+            </section>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+    <section id="body-plain">
+
+        <h3>Text</h3>
+
+        {% if body %}
+            {{ body|linebreaks }}
+        {% else %}
+            <p class="alert">This message doesn't contain any text content.</p>
+        {% endif %}
+
+    </section>
+
+    <section id="raw" class="last">
+
+        <h3>Raw</h3>
+
+        <pre>{{ raw }}</pre>
+
+    </section>
+
+{% endblock %}
