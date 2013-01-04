@@ -1,4 +1,6 @@
 from base64 import b64encode
+from collections import namedtuple
+
 from django.views.generic.simple import direct_to_template
 from django.utils.datastructures import SortedDict
 
@@ -6,10 +8,16 @@ from mailviews.previews import registry
 
 
 def preview_list(request):
-    context = {
-        'registry': registry,
-    }
-    return direct_to_template(request, 'mailviews/previews/list.html', extra_context=context)
+    PreviewGroup = namedtuple('Previews', ('module', 'previews'))
+
+    groups = []
+    for module in sorted(registry.keys()):
+        group = PreviewGroup(module, sorted(registry[module].values(), key=str))
+        groups.append(group)
+
+    return direct_to_template(request, 'mailviews/previews/list.html', extra_context={
+        'groups': groups,
+    })
 
 
 def preview_detail(request, module, identifier):

@@ -6,15 +6,15 @@
 
     <section id="message-list">
 
-        {% for module, previews in registry.items %}
+        {% for group in groups %}
 
-            <h2><small>{{ module }}</small></h2>
+            <h2><small>{{ group.module }}</small></h2>
 
             <table class="table">
-                {% for preview in previews.values %}
+                {% for preview in group.previews %}
                     <tr>
                         <th><a href="{{ preview.url }}">{{ preview }}</a></th>
-                        <td class="description">{{ preview.description }}</td>
+                        <td class="description">{{ preview.description|default_if_none:"" }}</td>
                     </tr>
                 {% endfor %}
             </table>

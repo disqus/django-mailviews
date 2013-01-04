@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 from django.utils.importlib import import_module
 from django.utils.module_loading import module_has_submodule
 
-from mailviews.utils import unimplemented
+from mailviews.utils import split_docstring, unimplemented
 
 
 logger = logging.getLogger(__name__)
@@ -15,7 +15,6 @@ registry = {}
 
 class Preview(object):
     message_view = property(unimplemented)  # must be implemented by subclasses
-    description = None
     verbose_name = None
 
     def __str__(self):
@@ -28,6 +27,14 @@ class Preview(object):
     @property
     def identifier(self):
         return self.message_view.__name__
+
+    @property
+    def description(self):
+        docstring = split_docstring(self.message_view)
+        if docstring is None:
+            return None
+
+        return docstring.summary
 
     @property
     def url(self):

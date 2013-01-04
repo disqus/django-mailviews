@@ -5,7 +5,7 @@ from setuptools import find_packages, setup
 install_requires = ['django']
 
 setup(name='django-mailviews',
-    version='0.4.0',
+    version='0.4.1',
     url='http://github.com/disqus/django-mailviews/',
     author='ted kaemming',
     author_email='ted@disqus.com',

@@ -9,6 +9,7 @@ from django.template.loader import get_template
 
 from mailviews.messages import (TemplatedEmailMessageView,
     TemplatedHTMLEmailMessageView)
+from mailviews.utils import split_docstring
 
 
 try:
@@ -207,3 +208,16 @@ class TemplatedHTMLEmailMessageViewTestCase(TemplatedEmailMessageViewTestCase):
         self.add_templates_to_message()
         self.message.send(self.context_dict, to=('ted@disqus.com',))
         self.assertOutboxLengthEquals(1)
+
+
+class SplitDocstringTestCase(TestCase):
+    def test_split_docstring(self):
+        header, body = split_docstring(split_docstring)
+        self.assertEqual(header, "Splits the docstring of the given value into it's summary and body.")
+
+    def test_split_docstring_no_body(self):
+        def fn():
+            """Does a thing."""
+
+        header, body = split_docstring(fn)
+        self.assertEqual(header, "Does a thing.")
