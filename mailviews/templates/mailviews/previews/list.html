@@ -6,12 +6,12 @@
 
     <section id="message-list">
 
-        {% for group in groups %}
+        {% for previews in site %}
 
-            <h2><small>{{ group.module }}</small></h2>
+            <h2><small>{{ previews.module }}</small></h2>
 
             <table class="table">
-                {% for preview in group.previews %}
+                {% for preview in previews.previews %}
                     <tr>
                         <th><a href="{{ preview.url }}">{{ preview }}</a></th>
                         <td class="description">{{ preview.description|default_if_none:"" }}</td>
