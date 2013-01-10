@@ -1,5 +1,6 @@
 import random
 
+from django import forms
 from django.contrib.webdesign.lorem_ipsum import paragraphs, words
 
 from mailviews.previews import Preview, site
@@ -24,5 +25,21 @@ class BasicHTMLPreview(BasicPreview):
     description = 'A basic HTML email message.'
 
 
+class CustomizationForm(forms.Form):
+    subject = forms.CharField()
+    content = forms.CharField(widget=forms.Textarea)
+
+    def get_message_view_kwargs(self):
+        return self.cleaned_data
+
+
+class CustomizablePreview(Preview):
+    message_view = BasicEmailMessageView
+    verbose_name = 'Basic Message, with Form'
+    description = 'A basic text email message, but customizable.'
+    form_class = CustomizationForm
+
+
 site.register(BasicPreview)
 site.register(BasicHTMLPreview)
+site.register(CustomizablePreview)

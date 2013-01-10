@@ -51,3 +51,11 @@ section:last-child {
 #headers th {
     width: 120px;
 }
+
+.errorlist {
+    margin-top: 20px;
+}
+
+.errorlist li {
+    color: #900;
+}

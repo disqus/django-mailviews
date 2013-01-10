@@ -25,6 +25,43 @@
         </h2>
     </div>
 
+    {% if form %}
+
+    <section id="form">
+
+        <form action="" method="get" class="well form-horizontal">
+
+            {% if form.errors %}
+
+            <div class="alert alert-error">
+                Please correct the errors below before continuing.
+            </div>
+
+            {% endif %}
+
+            {% for field in form %}
+                <div class="control-group">
+                    <label class="control-label" for="{{ field.auto_id }}">{{ field.label }}</label>
+                    <div class="controls">
+                        {{ field }}
+                        {{ field.errors }}
+                    </div>
+                </div>
+            {% endfor %}
+            <div class="control-group">
+                <div class="controls">
+                    <input type="submit" value="Generate Preview" class="btn btn-primary" />
+                </div>
+            </div>
+
+        </form>
+
+    </section>
+
+    {% endif %}
+
+    {% if message %}
+
     <header>
 
         <div id="headers">
@@ -88,5 +125,7 @@
         <pre>{{ raw }}</pre>
 
     </section>
+
+    {% endif %}
 
 {% endblock %}

@@ -76,6 +76,7 @@ class Preview(object):
     message_view = property(unimplemented)  # must be implemented by subclasses
     headers = ('Subject', 'From', 'To')
     verbose_name = None
+    form_class = None
 
     def __init__(self, site):
         self.site = site
@@ -98,27 +99,43 @@ class Preview(object):
             'preview': type(self).__name__,
         })
 
-    def get_message_view(self, request):
-        return self.message_view()
+    def get_message_view(self, request, **kwargs):
+        return self.message_view(**kwargs)
 
     def detail_view(self, request):
         """
         Renders the message view to a response.
         """
-        message_view = self.get_message_view(request)
+        context = {
+            'preview': self,
+        }
+
+        kwargs = {}
+        if self.form_class:
+            if request.GET:
+                form = self.form_class(data=request.GET)
+            else:
+                form = self.form_class()
+
+            context['form'] = form
+            if not form.is_bound or not form.is_valid():
+                return direct_to_template(request, 'mailviews/previews/detail.html', context)
+
+            kwargs.update(form.get_message_view_kwargs())
+
+        message_view = self.get_message_view(request, **kwargs)
 
         message = message_view.render_to_message()
         raw = message.message()
         headers = SortedDict((header, raw[header]) for header in self.headers)
 
-        context = {
-            'preview': self,
+        context.update({
             'message': message,
             'subject': message.subject,
             'body': message.body,
             'headers': headers,
             'raw': raw.as_string(),
-        }
+        })
 
         alternatives = getattr(message, 'alternatives', [])
         try:
