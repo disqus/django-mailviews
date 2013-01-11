@@ -5,6 +5,7 @@ from collections import namedtuple
 
 from django.conf.urls.defaults import include, patterns, url
 from django.core.urlresolvers import reverse
+from django.http import Http404
 from django.utils.datastructures import SortedDict
 from django.utils.importlib import import_module
 from django.utils.module_loading import module_has_submodule
@@ -27,6 +28,9 @@ class PreviewSite(object):
         self.__previews = {}
 
     def __iter__(self):
+        """
+        Returns an iterator of :class:`ModulePreviews` tuples, sorted by module nae.
+        """
         for module in sorted(self.__previews.keys()):
             previews = ModulePreviews(module, sorted(self.__previews[module].values(), key=str))
             yield previews
@@ -64,18 +68,37 @@ class PreviewSite(object):
         return include(urlpatterns, namespace=URL_NAMESPACE)
 
     def list_view(self, request):
+        """
+        Returns a list view response containing all of the registered previews.
+        """
         return direct_to_template(request, 'mailviews/previews/list.html', {
             'site': self,
         })
 
     def detail_view(self, request, module, preview):
-        return self.__previews[module][preview].detail_view(request)
+        """
+        Looks up a preview in the index, returning a detail view response.
+        """
+        try:
+            return self.__previews[module][preview].detail_view(request)
+        except KeyError:
+            raise Http404  # The provided module/preview does not exist in the index.
 
 
 class Preview(object):
-    message_view = property(unimplemented)  # must be implemented by subclasses
+    #: The message view class that will be instantiated to render the preview
+    #: message. This must be defined by subclasses.
+    message_view = property(unimplemented)
+
+    #: The subset of headers to show in the preview panel.
     headers = ('Subject', 'From', 'To')
+
+    #: The title of this email message to use in the previewer. If not provided,
+    #: this will default to the name of the message view class.
     verbose_name = None
+
+    #: A form class that will be used to customize the instantiation behavior
+    # of the message view class.
     form_class = None
 
     def __init__(self, site):
@@ -90,10 +113,19 @@ class Preview(object):
 
     @property
     def description(self):
+        """
+        A longer description of this preview that is used in the preview index.
+
+        If not provided, this defaults to the first paragraph of the underlying
+        message view class' docstring.
+        """
         return getattr(split_docstring(self.message_view), 'summary', None)
 
     @property
     def url(self):
+        """
+        The URL to access this preview.
+        """
         return reverse('%s:detail' % URL_NAMESPACE, kwargs={
             'module': self.module,
             'preview': type(self).__name__,
@@ -152,14 +184,24 @@ class Preview(object):
 
 
 def autodiscover():
+    """
+    Imports all available previews classes.
+    """
     from django.conf import settings
     for application in settings.INSTALLED_APPS:
         module = import_module(application)
-        try:
-            import_module('%s.emails.previews' % application)
-        except ImportError:
-            if module_has_submodule(module, 'emails.previews'):
-                raise
+
+        if module_has_submodule(module, 'emails'):
+            emails = import_module('%s.emails' % application)
+            try:
+                import_module('%s.emails.previews' % application)
+            except ImportError:
+                # Only raise the exception if this module contains previews and
+                # there was a problem importing them. (An emails module that
+                # does not contain previews is not an error.)
+                if module_has_submodule(emails, 'previews'):
+                    raise
 
 
+#: The default preview site.
 site = PreviewSite()
