@@ -23,19 +23,66 @@ Basic Usage
         body_template_name = 'emails/welcome/body.txt'
 
     # Instantiate and send a message.
-    message = WelcomeMessageView()
-    message.send(extra_context={
+    message = WelcomeMessageView().send(extra_context={
         'user': user,
     }, to=(user.email,))
 
 This isn't actually the best pattern for sending messages to a user -- read the
 notes under "Best Practices" for a better approach.
 
+Using the Preview Site
+----------------------
+
+Registering URLs and Enabling Discovery
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Add ``mailviews`` to your project's ``INSTALLED_APPS`` setting.
+* Add the following somewhere within your project's ``ROOT_URLCONF``:
+
+.. code:: python
+
+    from mailviews.previews import autodiscover, site
+
+    autodiscover()
+
+    urlpatterns = patterns('',
+        url(regex=r'^emails/', view=site.urls),
+    )
+
+The preview index will now be available at the ``emails/`` URL.
+
+Creating Preview Classes
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+To create a simple preview, add a ``emails.previews`` submodule within one of your
+``INSTALLED_APPS``, and create a new subclass of ``Preview``.
+
+.. code:: python
+
+    from mailviews.previews import Preview, site
+    from example.emails.views import WelcomeMessageView
+
+    # Define a new preview class.
+    class BasicPreview(Preview):
+        message_view = WelcomeMessageView
+
+    # Register the preview class with the preview index.
+    site.register(BasicPreview)
+
+You can see more detailed examples within the `test suite <https://github.com/disqus/django-mailviews/blob/master/mailviews/tests/emails/previews.py>`_
+or in the code documentation for ``mailviews.previews``.
+
+Customizing Preview Behavior
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can also use Django forms to customize the creation of message previews by
+adding a ``form_class`` attribute to your ``Preview`` subclasses. The form must
+provide a ``get_message_view_kwargs`` method that returns a the keyword arguments
+to be used when constructing the message view instance.
+
 Best Practices
 --------------
 
-* Keep all of your message view subclasses in an ``emails`` module in your
-  application.
 * Try and avoid using the ``extra_context`` argument when sending emails.
   Instead, create an ``EmailMessageView`` subclass whose constructor accepts
   as arguments all of the objects that you require to generate the context and
@@ -86,6 +133,5 @@ the tests for your own projects if you use ``python manage.py test`` and
 
 To run tests against the entire build matrix, run ``make test-matrix``.
 
-To view an example message preview, you can start a test server by running
-``make test-server`` and visiting http://127.0.0.1:8000/ for a plain text
-message preview, and http://127.0.0.1:8000/?html for an HTML message preview.
+To view an example preview site, you can start a test server by running
+``make test-server`` and visiting http://127.0.0.1:8000/.
