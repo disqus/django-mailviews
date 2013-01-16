@@ -101,6 +101,9 @@ class Preview(object):
     # of the message view class.
     form_class = None
 
+    #: The template that will be rendered for this preview.
+    template_name = 'mailviews/previews/detail.html'
+
     def __init__(self, site):
         self.site = site
 
@@ -180,7 +183,7 @@ class Preview(object):
         except StopIteration:
             pass
 
-        return direct_to_template(request, 'mailviews/previews/detail.html', context)
+        return direct_to_template(request, self.template_name, context)
 
 
 def autodiscover():
