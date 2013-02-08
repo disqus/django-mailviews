@@ -6,11 +6,13 @@
 
     <div class="nav-collapse collapse">
         <ul class="nav">
-            {% if html %}
-                <li><a href="#html">HTML</a></li>
-            {% endif %}
-            <li><a href="#body-plain">Text</a></li>
-            <li><a href="#raw">Raw</a></li>
+            {% block navigation.items %}
+                {% if html %}
+                    <li><a href="#html">HTML</a></li>
+                {% endif %}
+                <li><a href="#body-plain">Text</a></li>
+                <li><a href="#raw">Raw</a></li>
+            {% endblock %}
         </ul>
     </div>
 
