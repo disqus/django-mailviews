@@ -15,4 +15,5 @@ setup(name='django-mailviews',
     install_requires=install_requires,
     test_suite='mailviews.tests.run',
     zip_safe=False,
+    license='Apache License 2.0',
 )
