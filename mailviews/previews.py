@@ -178,7 +178,7 @@ class Preview(object):
                 if alternative[1] == 'text/html')
             context.update({
                 'html': html,
-                'escaped_html': b64encode(html),
+                'escaped_html': b64encode(html.encode('utf-8')),
             })
         except StopIteration:
             pass
