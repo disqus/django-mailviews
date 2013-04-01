@@ -41,7 +41,7 @@ test-server: develop
 publish: static
 	git tag $$(python setup.py --version)
 	git push && git push --tags
-	python setup.py sdist upload -r disqus
+	python setup.py sdist upload
 
 
 .PHONY: bootstrap static develop lint clean test test-matrix test-server publish
