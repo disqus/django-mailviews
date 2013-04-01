@@ -2,6 +2,7 @@ import logging
 import os
 from base64 import b64encode
 from collections import namedtuple
+from email.header import decode_header
 
 from django.conf.urls.defaults import include, patterns, url
 from django.core.urlresolvers import reverse
@@ -21,6 +22,17 @@ logger = logging.getLogger(__name__)
 URL_NAMESPACE = 'mailviews'
 
 ModulePreviews = namedtuple('ModulePreviews', ('module', 'previews'))
+
+
+def maybe_decode_header(header):
+    """
+    Decodes an encoded 7-bit ASCII header value into it's actual value.
+    """
+    value, encoding = decode_header(header)[0]
+    if encoding:
+        return value.decode(encoding)
+    else:
+        return value
 
 
 class PreviewSite(object):
@@ -162,7 +174,7 @@ class Preview(object):
 
         message = message_view.render_to_message()
         raw = message.message()
-        headers = SortedDict((header, raw[header]) for header in self.headers)
+        headers = SortedDict((header, maybe_decode_header(raw[header])) for header in self.headers)
 
         context.update({
             'message': message,
@@ -178,7 +190,7 @@ class Preview(object):
                 if alternative[1] == 'text/html')
             context.update({
                 'html': html,
-                'escaped_html': b64encode(html),
+                'escaped_html': b64encode(html.encode('utf-8')),
             })
         except StopIteration:
             pass
