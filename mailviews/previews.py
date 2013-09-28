@@ -92,9 +92,10 @@ class PreviewSite(object):
         Looks up a preview in the index, returning a detail view response.
         """
         try:
-            return self.__previews[module][preview].detail_view(request)
+            preview = self.__previews[module][preview]
         except KeyError:
             raise Http404  # The provided module/preview does not exist in the index.
+        return preview.detail_view(request)
 
 
 class Preview(object):
