@@ -1,3 +1,4 @@
+{% load url from future %}
 <!doctype html>
 <html lang="en">
 <head>
@@ -18,7 +19,7 @@
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
-          <a class="brand" href="{% url mailviews:list %}">Message Preview</a>
+          <a class="brand" href="{% url 'mailviews:list' %}">Message Preview</a>
           {% block navigation %}{% endblock %}
         </div>
       </div>

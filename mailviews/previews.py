@@ -10,7 +10,8 @@ from django.http import Http404
 from django.utils.datastructures import SortedDict
 from django.utils.importlib import import_module
 from django.utils.module_loading import module_has_submodule
-from django.views.generic.simple import direct_to_template
+from django.shortcuts import render
+
 
 from mailviews.helpers import should_use_staticfiles
 from mailviews.utils import split_docstring, unimplemented
@@ -83,7 +84,7 @@ class PreviewSite(object):
         """
         Returns a list view response containing all of the registered previews.
         """
-        return direct_to_template(request, 'mailviews/previews/list.html', {
+        return render(request, 'mailviews/previews/list.html', {
             'site': self,
         })
 
@@ -167,7 +168,7 @@ class Preview(object):
 
             context['form'] = form
             if not form.is_bound or not form.is_valid():
-                return direct_to_template(request, 'mailviews/previews/detail.html', context)
+                return render(request, 'mailviews/previews/detail.html', context)
 
             kwargs.update(form.get_message_view_kwargs())
 
@@ -196,7 +197,7 @@ class Preview(object):
         except StopIteration:
             pass
 
-        return direct_to_template(request, self.template_name, context)
+        return render(request, self.template_name, context)
 
 
 def autodiscover():
