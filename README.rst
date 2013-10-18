@@ -124,7 +124,7 @@ user-related emails. (This is left as an exercise for the reader.)
 Testing and Development
 -----------------------
 
-Tested on Python 2.6 and 2.7, as well as Django 1.2, 1.3 and 1.4.
+Tested on Python 2.6 and 2.7, as well as Django 1.3, 1.4, and 1.5.
 
 To run the test suite against your installed Django version, run
 ``python setup.py test``, or ``make test``. (If Django isn't already installed,
