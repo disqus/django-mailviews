@@ -7,11 +7,10 @@ from email.header import decode_header
 from django.conf.urls.defaults import include, patterns, url
 from django.core.urlresolvers import reverse
 from django.http import Http404
+from django.shortcuts import render
 from django.utils.datastructures import SortedDict
 from django.utils.importlib import import_module
 from django.utils.module_loading import module_has_submodule
-from django.shortcuts import render
-
 
 from mailviews.helpers import should_use_staticfiles
 from mailviews.utils import split_docstring, unimplemented
