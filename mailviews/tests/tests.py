@@ -3,12 +3,20 @@ import os
 
 from django.core.exceptions import ImproperlyConfigured
 from django.core import mail
+from django.core.urlresolvers import reverse
 from django.test import TestCase
+from django.test.client import Client
 from django.template import Context, Template, TemplateDoesNotExist
 from django.template.loader import get_template
 
 from mailviews.messages import (TemplatedEmailMessageView,
-    TemplatedHTMLEmailMessageView)
+                                TemplatedHTMLEmailMessageView)
+from mailviews.previews import URL_NAMESPACE
+from mailviews.tests.emails.views import (BasicEmailMessageView,
+                                          BasicHTMLEmailMessageView)
+from mailviews.tests.emails.previews import (BasicPreview,
+                                             BasicHTMLPreview,
+                                             CustomizablePreview)
 from mailviews.utils import split_docstring
 
 
@@ -221,3 +229,42 @@ class SplitDocstringTestCase(TestCase):
 
         header, body = split_docstring(fn)
         self.assertEqual(header, "Does a thing.")
+
+
+class PreviewSiteTestCase(TestCase):
+
+    def setUp(self):
+        super(PreviewSiteTestCase, self).setUp()
+        self.client = Client()
+
+    def test_basic_preview(self):
+        url = reverse('%s:detail' % URL_NAMESPACE, kwargs={
+            'module': BasicEmailMessageView.__module__,
+            'preview': BasicPreview.__name__
+        })
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('#body-plain', response.content)
+        self.assertIn('#raw', response.content)
+
+    def test_basic_html_preview(self):
+        url = reverse('%s:detail' % URL_NAMESPACE, kwargs={
+            'module': BasicHTMLEmailMessageView.__module__,
+            'preview': BasicHTMLPreview.__name__
+        })
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('#html', response.content)
+        self.assertIn('#body-plain', response.content)
+        self.assertIn('#raw', response.content)
+
+    def test_customizable_preview(self):
+        url = reverse('%s:detail' % URL_NAMESPACE, kwargs={
+            'module': BasicEmailMessageView.__module__,
+            'preview': CustomizablePreview.__name__
+        })
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('<form', response.content)
+        self.assertIn('#body-plain', response.content)
+        self.assertIn('#raw', response.content)
