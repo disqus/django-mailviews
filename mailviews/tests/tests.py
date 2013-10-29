@@ -268,11 +268,3 @@ class PreviewSiteTestCase(TestCase):
         self.assertIn('<form', response.content)
         self.assertIn('#body-plain', response.content)
         self.assertIn('#raw', response.content)
-
-    def test_page_not_found(self):
-        url = reverse('%s:detail' % URL_NAMESPACE, kwargs={
-            'module': 'not.found.views',
-            'preview': 'NotFoundPreview'
-        })
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 404)
