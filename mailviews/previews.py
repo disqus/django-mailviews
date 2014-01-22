@@ -4,7 +4,12 @@ from base64 import b64encode
 from collections import namedtuple
 from email.header import decode_header
 
-from django.conf.urls import patterns, include, url
+try:
+    from django.conf.urls import patterns, include, url
+except ImportError:
+    # Django <1.4 compat
+    from django.conf.urls.defaults import patterns, include, url
+
 from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.shortcuts import render
