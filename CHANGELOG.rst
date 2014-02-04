@@ -1,6 +1,17 @@
 Changes
 =======
 
+Version 0.6.3
+-------------
+
+* Includes Bootstrap images in package for increased compatibility with
+  compressors and preprocessors.
+
+Version 0.6.2
+-------------
+
+* Adds support for Django 1.6.
+
 Version 0.6.1
 -------------
 
