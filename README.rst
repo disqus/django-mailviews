@@ -155,6 +155,9 @@ To view an example preview site, you can start a test server by running:
 
     python -m mailviews.tests.manage runserver
 
+Integration with Third-Party Applications
+`````````````````````````````````````````
+
 All tests will automatically be run using the Django test runner when you run
 the tests for your own projects if you use ``python manage.py test`` and
 ``mailviews`` is within your ``settings.INSTALLED_APPS``.
