@@ -13,7 +13,7 @@ setup(name='django-mailviews',
     install_requires=[
         'Django>=1.3',
     ],
-    test_suite='mailviews.tests.run',
+    test_suite='mailviews.tests.__main__.__main__',
     zip_safe=False,
     license='Apache License 2.0',
 )

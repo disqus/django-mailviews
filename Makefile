@@ -4,6 +4,9 @@ LESSC = ./node_modules/.bin/lessc
 JQUERY = $(STATIC_DIRECTORY)/javascript/jquery.js
 
 
+develop: static
+	pip install -e .
+
 $(LESSC):
 	npm install .
 
@@ -17,10 +20,6 @@ $(JQUERY):
 	curl http://code.jquery.com/jquery-1.8.3.js > $(JQUERY)
 
 static: bootstrap $(JQUERY)
-
-
-develop: static
-	python setup.py develop
 
 lint:
 	pip install --use-mirrors flake8
@@ -45,4 +44,13 @@ publish: static
 	python setup.py sdist upload
 
 
-.PHONY: bootstrap static develop lint clean test test-matrix test-server publish
+.PHONY:
+	bootstrap \
+	clean \
+	develop \
+	lint \
+	publish \
+	static \
+	test \
+	test-matrix \
+	test-server

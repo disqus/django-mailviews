@@ -1,7 +1,9 @@
 *.egg*
 *.py[co]
+.coverage
 .env
 .tox/
 dist/
 docs/_build/
+htmlcov/
 node_modules/
