@@ -244,8 +244,8 @@ class PreviewSiteTestCase(TestCase):
         })
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertIn('#body-plain', response.content)
-        self.assertIn('#raw', response.content)
+        self.assertContains(response, '#body-plain')
+        self.assertContains(response, '#raw')
 
     def test_basic_html_preview(self):
         url = reverse('%s:detail' % URL_NAMESPACE, kwargs={
@@ -254,9 +254,9 @@ class PreviewSiteTestCase(TestCase):
         })
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertIn('#html', response.content)
-        self.assertIn('#body-plain', response.content)
-        self.assertIn('#raw', response.content)
+        self.assertContains(response, '#html')
+        self.assertContains(response, '#body-plain')
+        self.assertContains(response, '#raw')
 
     def test_customizable_preview(self):
         url = reverse('%s:detail' % URL_NAMESPACE, kwargs={
@@ -265,6 +265,6 @@ class PreviewSiteTestCase(TestCase):
         })
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertIn('<form', response.content)
-        self.assertIn('#body-plain', response.content)
-        self.assertIn('#raw', response.content)
+        self.assertContains(response, '<form')
+        self.assertContains(response, '#body-plain')
+        self.assertContains(response, '#raw')

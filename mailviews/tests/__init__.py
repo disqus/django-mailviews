@@ -1,4 +1,5 @@
 from django.conf import settings
+import django
 
 if not settings.configured:
     settings.configure(
@@ -33,6 +34,8 @@ if not settings.configured:
         },
     )
 
+    if hasattr(django, 'setup'):
+        django.setup()
 
 from mailviews.tests.tests import *  # NOQA
 
