@@ -1,14 +1,15 @@
 import random
 
 from django import forms
-
-from mailviews.previews import Preview, site
-from mailviews.tests.emails.views import (BasicEmailMessageView,
-    BasicHTMLEmailMessageView)
 try:
     from django.utils.lorem_ipsum import words, paragraphs
 except ImportError:
     from django.contrib.webdesign.lorem_ipsum import paragraphs, words
+
+from mailviews.previews import Preview, site
+from mailviews.tests.emails.views import (BasicEmailMessageView,
+    BasicHTMLEmailMessageView)
+
 
 class BasicPreview(Preview):
     message_view = BasicEmailMessageView
