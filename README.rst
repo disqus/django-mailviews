@@ -18,10 +18,10 @@ Basic Usage
 
 .. code:: python
 
-    from mailviews.messages import EmailMessageView
+    from mailviews.messages import TemplatedEmailMessageView
 
-    # Subclass the `EmailMessageView`, adding the templates you want to render.
-    class WelcomeMessageView(EmailMessageView):
+    # Subclass the `TemplatedEmailMessageView`, adding the templates you want to render.
+    class WelcomeMessageView(TemplatedEmailMessageView):
         subject_template_name = 'emails/welcome/subject.txt'
         body_template_name = 'emails/welcome/body.txt'
 
@@ -87,16 +87,16 @@ Best Practices
 --------------
 
 * Try and avoid using the ``extra_context`` argument when sending emails.
-  Instead, create an ``EmailMessageView`` subclass whose constructor accepts
+  Instead, create an ``TemplatedEmailMessageView`` subclass whose constructor accepts
   as arguments all of the objects that you require to generate the context and
   send the message. For example, the code shown in "Basic Usage" could written
   instead as the following:
 
 .. code:: python
 
-    from mailviews.messages import EmailMessageView
+    from mailviews.messages import TemplatedEmailMessageView
 
-    class WelcomeMessageView(EmailMessageView):
+    class WelcomeMessageView(TemplatedEmailMessageView):
         subject_template_name = 'emails/welcome/subject.txt'
         body_template_name = 'emails/welcome/body.txt'
 
