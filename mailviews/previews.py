@@ -13,7 +13,13 @@ except ImportError:
 from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.shortcuts import render
-from django.utils.datastructures import SortedDict
+
+try:
+    # Django <= 1.8
+    from django.utils.datastructures import SortedDict as OrganizedDict
+except ImportError:
+    from collections import OrderedDict as OrganizedDict
+
 from django.utils.importlib import import_module
 from django.utils.module_loading import module_has_submodule
 
@@ -180,7 +186,7 @@ class Preview(object):
 
         message = message_view.render_to_message()
         raw = message.message()
-        headers = SortedDict((header, maybe_decode_header(raw[header])) for header in self.headers)
+        headers = OrganizedDict((header, maybe_decode_header(raw[header])) for header in self.headers)
 
         context.update({
             'message': message,
