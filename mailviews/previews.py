@@ -20,7 +20,12 @@ try:
 except ImportError:
     from collections import OrderedDict as OrganizedDict
 
-from django.utils.importlib import import_module
+try:
+    # Django <= 1.8
+    from django.utils.importlib import import_module
+except ImportError:
+    from importlib import import_module
+
 from django.utils.module_loading import module_has_submodule
 
 from mailviews.helpers import should_use_staticfiles
