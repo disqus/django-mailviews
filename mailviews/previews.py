@@ -15,16 +15,14 @@ from django.http import Http404
 from django.shortcuts import render
 
 try:
-    # Django <= 1.8
-    from django.utils.datastructures import SortedDict as OrganizedDict
-except ImportError:
     from collections import OrderedDict as OrganizedDict
+except ImportError:
+    from django.utils.datastructures import SortedDict as OrganizedDict
 
 try:
-    # Django <= 1.8
-    from django.utils.importlib import import_module
-except ImportError:
     from importlib import import_module
+except ImportError:
+    from django.utils.importlib import import_module
 
 from django.utils.module_loading import module_has_submodule
 
