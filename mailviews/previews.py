@@ -15,9 +15,9 @@ from django.http import Http404
 from django.shortcuts import render
 
 try:
-    from collections import OrderedDict as OrganizedDict
+    from collections import OrderedDict
 except ImportError:
-    from django.utils.datastructures import SortedDict as OrganizedDict
+    from django.utils.datastructures import SortedDict as OrderedDict
 
 try:
     from importlib import import_module
@@ -189,7 +189,7 @@ class Preview(object):
 
         message = message_view.render_to_message()
         raw = message.message()
-        headers = OrganizedDict((header, maybe_decode_header(raw[header])) for header in self.headers)
+        headers = OrderedDict((header, maybe_decode_header(raw[header])) for header in self.headers)
 
         context.update({
             'message': message,
