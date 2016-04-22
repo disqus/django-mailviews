@@ -219,19 +219,23 @@ def autodiscover():
     """
     from django.conf import settings
     for application in settings.INSTALLED_APPS:
-        module = import_module(application)
+        # As of Django 1.7, settings.INSTALLED_APPS may contain classes instead of modules, hence the try/except
+        # See here: https://docs.djangoproject.com/en/dev/releases/1.7/#introspecting-applications
+        try:
+            module = import_module(application)
 
-        if module_has_submodule(module, 'emails'):
-            emails = import_module('%s.emails' % application)
-            try:
-                import_module('%s.emails.previews' % application)
-            except ImportError:
-                # Only raise the exception if this module contains previews and
-                # there was a problem importing them. (An emails module that
-                # does not contain previews is not an error.)
-                if module_has_submodule(emails, 'previews'):
-                    raise
-
+            if module_has_submodule(module, 'emails'):
+                emails = import_module('%s.emails' % application)
+                try:
+                    import_module('%s.emails.previews' % application)
+                except ImportError:
+                    # Only raise the exception if this module contains previews and
+                    # there was a problem importing them. (An emails module that
+                    # does not contain previews is not an error.)
+                    if module_has_submodule(emails, 'previews'):
+                        raise
+        except ImportError:
+            pass
 
 #: The default preview site.
 site = PreviewSite()
