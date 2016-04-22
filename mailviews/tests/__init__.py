@@ -5,6 +5,8 @@ if not settings.configured:
     settings.configure(
         DEBUG=True,
         INSTALLED_APPS=(
+            'django.contrib.auth',
+            'django.contrib.contenttypes',
             'mailviews',
             'mailviews.tests',
         ),
