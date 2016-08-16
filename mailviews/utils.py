@@ -1,7 +1,9 @@
 import textwrap
 from collections import namedtuple
 
+import django
 from django.template import Context
+from distutils.version import StrictVersion
 
 
 Docstring = namedtuple('Docstring', ('summary', 'body'))
@@ -38,3 +40,11 @@ def unescape(context):
     template in an `{% autoescape off %}` tag.
     """
     return Context(context, autoescape=False)
+
+
+def is_django_version_greater_or_equal(version):
+    return StrictVersion(django.get_version()) >= StrictVersion(version)
+
+
+def is_django_version_greater_than_1_10():
+    return is_django_version_greater_or_equal('1.10')
