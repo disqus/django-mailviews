@@ -259,7 +259,6 @@ class PreviewSiteTestCase(TestCase):
         self.assertContains(response, '#raw')
 
     def test_customizable_preview(self):
-        print URL_NAMESPACE
         url = reverse('%s:detail' % URL_NAMESPACE, kwargs={
             'module': BasicEmailMessageView.__module__,
             'preview': CustomizablePreview.__name__
