@@ -4,7 +4,7 @@ from base64 import b64encode
 from collections import namedtuple
 from email.header import decode_header
 
-
+import django
 from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.shortcuts import render
@@ -22,9 +22,9 @@ except ImportError:
 from django.utils.module_loading import module_has_submodule
 
 from mailviews.helpers import should_use_staticfiles
-from mailviews.utils import split_docstring, unimplemented, is_django_version_greater_than_1_10
+from mailviews.utils import split_docstring, unimplemented, is_django_version_greater_than_1_9
 
-if is_django_version_greater_than_1_10():
+if is_django_version_greater_than_1_9():
     from django.conf.urls import include, url
 else:
     try:
@@ -86,7 +86,7 @@ class PreviewSite(object):
                 name='detail'),
         ]
 
-        if not is_django_version_greater_than_1_10:
+        if not is_django_version_greater_than_1_9:
             urlpatterns = patterns('',
                 urlpatterns
             )
@@ -94,18 +94,17 @@ class PreviewSite(object):
         if not should_use_staticfiles():
             url_staticsfiles = [
                 url(regex=r'^static/(?P<path>.*)$',
-                    view='django.views.static.serve',
+                    view=django.views.static.serve,
                     kwargs={
                         'document_root': os.path.join(os.path.dirname(__file__), 'static'),
                     },
                     name='static')
             ]
             
-            if is_django_version_greater_than_1_10:
+            if is_django_version_greater_than_1_9:
                 urlpatterns += url_staticsfiles
             else:
                 urlpatterns += patterns('', url_staticsfiles)
-
         return include(urlpatterns, namespace=URL_NAMESPACE)
 
     def list_view(self, request):

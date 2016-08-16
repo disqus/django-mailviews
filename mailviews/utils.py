@@ -42,9 +42,9 @@ def unescape(context):
     return Context(context, autoescape=False)
 
 
-def is_django_version_greater_or_equal(version):
-    return StrictVersion(django.get_version()) >= StrictVersion(version)
+def is_django_version_greater(version):
+    return StrictVersion(django.get_version()) > StrictVersion(version)
 
 
-def is_django_version_greater_than_1_10():
-    return is_django_version_greater_or_equal('1.10')
+def is_django_version_greater_than_1_9():
+    return is_django_version_greater('1.9')

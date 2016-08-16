@@ -34,6 +34,13 @@ if not settings.configured:
                 },
             },
         },
+        TEMPLATES = [
+            {
+                'BACKEND': 'django.template.backends.django.DjangoTemplates',
+                'DIRS': [],
+                'APP_DIRS': True,
+            },
+        ]
     )
 
     if hasattr(django, 'setup'):
