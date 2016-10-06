@@ -44,7 +44,3 @@ def unescape(context):
 
 def is_django_version_greater(version):
     return StrictVersion(django.get_version()) > StrictVersion(version)
-
-
-def is_django_version_greater_than_1_9():
-    return is_django_version_greater('1.9')

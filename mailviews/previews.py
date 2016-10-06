@@ -22,16 +22,12 @@ except ImportError:
 from django.utils.module_loading import module_has_submodule
 
 from mailviews.helpers import should_use_staticfiles
-from mailviews.utils import split_docstring, unimplemented, is_django_version_greater_than_1_9
+from mailviews.utils import split_docstring, unimplemented, is_django_version_greater
 
-if is_django_version_greater_than_1_9():
+if is_django_version_greater('1.9'):
     from django.conf.urls import include, url
 else:
-    try:
-        from django.conf.urls import patterns, include, url
-    except ImportError:
-        # Django <1.4 compat
-        from django.conf.urls.defaults import patterns, include, url
+    from django.conf.urls import patterns, include, url
 
 
 logger = logging.getLogger(__name__)
@@ -86,11 +82,6 @@ class PreviewSite(object):
                 name='detail'),
         ]
 
-        if not is_django_version_greater_than_1_9:
-            urlpatterns = patterns('',
-                urlpatterns
-            )
-
         if not should_use_staticfiles():
             url_staticsfiles = [
                 url(regex=r'^static/(?P<path>.*)$',
@@ -100,11 +91,9 @@ class PreviewSite(object):
                     },
                     name='static')
             ]
+
+            urlpatterns += url_staticsfiles
             
-            if is_django_version_greater_than_1_9:
-                urlpatterns += url_staticsfiles
-            else:
-                urlpatterns += patterns('', url_staticsfiles)
         return include(urlpatterns, namespace=URL_NAMESPACE)
 
     def list_view(self, request):
