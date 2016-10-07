@@ -1,5 +1,3 @@
-from mailviews.utils import is_django_version_greater
-
 from django.conf.urls import include, url
 
 
