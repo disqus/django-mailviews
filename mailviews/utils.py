@@ -40,7 +40,3 @@ def unescape(context):
     template in an `{% autoescape off %}` tag.
     """
     return Context(context, autoescape=False)
-
-
-def is_django_version_greater(version):
-    return StrictVersion(django.get_version()) > StrictVersion(version)

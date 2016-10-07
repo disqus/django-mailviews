@@ -22,12 +22,9 @@ except ImportError:
 from django.utils.module_loading import module_has_submodule
 
 from mailviews.helpers import should_use_staticfiles
-from mailviews.utils import split_docstring, unimplemented, is_django_version_greater
+from mailviews.utils import split_docstring, unimplemented
 
-if is_django_version_greater('1.9'):
-    from django.conf.urls import include, url
-else:
-    from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 
 
 logger = logging.getLogger(__name__)
