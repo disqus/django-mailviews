@@ -1,10 +1,7 @@
 import random
 
 from django import forms
-try:
-    from django.utils.lorem_ipsum import words, paragraphs
-except ImportError:
-    from django.contrib.webdesign.lorem_ipsum import paragraphs, words
+from django.utils.lorem_ipsum import words, paragraphs
 
 from mailviews.previews import Preview, site
 from mailviews.tests.emails.views import (BasicEmailMessageView,

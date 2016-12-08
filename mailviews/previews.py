@@ -10,15 +10,9 @@ from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.shortcuts import render
 
-try:
-    from collections import OrderedDict
-except ImportError:
-    from django.utils.datastructures import SortedDict as OrderedDict
+from collections import OrderedDict
 
-try:
-    from importlib import import_module
-except ImportError:
-    from django.utils.importlib import import_module
+from importlib import import_module
 
 from django.utils.module_loading import module_has_submodule
 

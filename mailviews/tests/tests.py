@@ -20,10 +20,7 @@ from mailviews.tests.emails.previews import (BasicPreview,
 from mailviews.utils import split_docstring
 
 
-try:
-    from django.test.utils import override_settings
-except ImportError:
-    from mailviews.tests.utils import override_settings  # noqa
+from django.test.utils import override_settings
 
 
 using_test_templates = override_settings(
