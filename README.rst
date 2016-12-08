@@ -48,9 +48,9 @@ Registering URLs and Enabling Discovery
 
     autodiscover()
 
-    urlpatterns = patterns('',
+    urlpatterns = [
         url(regex=r'^emails/', view=site.urls),
-    )
+    ]
 
 The preview index will now be available at the ``emails/`` URL.
 
