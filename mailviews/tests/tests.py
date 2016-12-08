@@ -24,6 +24,8 @@ from django.test.utils import override_settings
 
 
 using_test_templates = override_settings(
+    TEMPLATE_LOADERS=['django.template.loaders.filesystem.Loader',
+                      'django.template.loaders.app_directories.Loader'],
     TEMPLATES=[
         {
             'BACKEND': 'django.template.backends.django.DjangoTemplates',
