@@ -20,19 +20,36 @@ from mailviews.tests.emails.previews import (BasicPreview,
 from mailviews.utils import split_docstring
 
 
-try:
-    from django.test.utils import override_settings
-except ImportError:
-    from mailviews.tests.utils import override_settings  # noqa
+from django.test.utils import override_settings
 
 
 using_test_templates = override_settings(
-    TEMPLATE_DIRS=(
-        os.path.join(os.path.dirname(__file__), 'templates'),
-    ),
-    TEMPLATE_LOADERS=(
-        'django.template.loaders.filesystem.Loader',
-    )
+    TEMPLATE_LOADERS=['django.template.loaders.filesystem.Loader',
+                      'django.template.loaders.app_directories.Loader'],
+    TEMPLATES=[
+        {
+            'BACKEND': 'django.template.backends.django.DjangoTemplates',
+            'DIRS': [
+                os.path.join(os.path.dirname(__file__), 'templates'),
+            ],
+            'OPTIONS': {
+                'context_processors': [
+                    # Insert your TEMPLATE_CONTEXT_PROCESSORS here or use this
+                    # list if you haven't customized them:
+                    'django.contrib.auth.context_processors.auth',
+                    'django.template.context_processors.debug',
+                    'django.template.context_processors.i18n',
+                    'django.template.context_processors.media',
+                    'django.template.context_processors.static',
+                    'django.template.context_processors.tz',
+                    'django.contrib.messages.context_processors.messages',
+                ],
+                'loaders': [
+                    'django.template.loaders.filesystem.Loader',
+                ]
+            },
+        },
+    ],
 )
 
 

@@ -4,25 +4,15 @@ from base64 import b64encode
 from collections import namedtuple
 from email.header import decode_header
 
-try:
-    from django.conf.urls import patterns, include, url
-except ImportError:
-    # Django <1.4 compat
-    from django.conf.urls.defaults import patterns, include, url
+from django.conf.urls import include, url
 
 from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.shortcuts import render
 
-try:
-    from collections import OrderedDict
-except ImportError:
-    from django.utils.datastructures import SortedDict as OrderedDict
+from collections import OrderedDict
 
-try:
-    from importlib import import_module
-except ImportError:
-    from django.utils.importlib import import_module
+from importlib import import_module
 
 from django.utils.module_loading import module_has_submodule
 
@@ -72,24 +62,24 @@ class PreviewSite(object):
 
     @property
     def urls(self):
-        urlpatterns = patterns('',
+        urlpatterns =[
             url(regex=r'^$',
                 view=self.list_view,
                 name='list'),
             url(regex=r'^(?P<module>.+)/(?P<preview>.+)/$',
                 view=self.detail_view,
                 name='detail'),
-        )
+        ]
 
         if not should_use_staticfiles():
-            urlpatterns += patterns('',
+            urlpatterns += [
                 url(regex=r'^static/(?P<path>.*)$',
                     view='django.views.static.serve',
                     kwargs={
                         'document_root': os.path.join(os.path.dirname(__file__), 'static'),
                     },
                     name='static'),
-                )
+                ]
 
         return include(urlpatterns, namespace=URL_NAMESPACE)
 
