@@ -1,9 +1,7 @@
 import textwrap
 from collections import namedtuple
 
-import django
 from django.template import Context
-from distutils.version import StrictVersion
 
 
 Docstring = namedtuple('Docstring', ('summary', 'body'))
