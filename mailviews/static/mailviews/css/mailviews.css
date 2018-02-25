@@ -43,6 +43,10 @@ section:last-child {
     padding: 0;
 }
 
+#html a {
+    float: right;
+}
+
 #headers th,
 #headers td {
     border: 0;
