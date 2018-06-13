@@ -6,7 +6,7 @@ from django.core import mail
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.client import Client
-from django.template import Context, Template, TemplateDoesNotExist
+from django.template import TemplateDoesNotExist
 from django.template.loader import get_template
 
 from mailviews.messages import (TemplatedEmailMessageView,
@@ -67,17 +67,17 @@ class TemplatedEmailMessageViewTestCase(EmailMessageViewTestCase):
         self.template = 'Hello, world!'
 
         self.subject = 'subject'
-        self.subject_template = Template('{{ subject }}')
+        self.subject_template = get_template('subject.txt')
 
         self.body = 'body'
-        self.body_template = Template('{{ body }}')
+        self.body_template = get_template('body.txt')
 
         self.context_dict = {
             'subject': self.subject,
             'body': self.body,
         }
 
-        self.context = Context(self.context_dict)
+        self.context = self.context_dict
 
         self.render_subject = functools.partial(self.message.render_subject,
             context=self.context)
@@ -131,13 +131,13 @@ class TemplatedEmailMessageViewTestCase(EmailMessageViewTestCase):
 
     def test_body_template(self):
         self.message.body_template = self.body_template
-        self.assertEqual(self.render_body(), self.body)
+        self.assertEqual(self.render_body(), "body\n")
 
     def test_render_to_message(self):
         self.add_templates_to_message()
         message = self.message.render_to_message(self.context_dict)
         self.assertEqual(message.subject, self.subject)
-        self.assertEqual(message.body, self.body)
+        self.assertEqual(message.body, "body\n")
 
     def test_send(self):
         self.add_templates_to_message()
@@ -167,7 +167,7 @@ class TemplatedHTMLEmailMessageViewTestCase(TemplatedEmailMessageViewTestCase):
         super(TemplatedHTMLEmailMessageViewTestCase, self).setUp()
 
         self.html_body = 'html body'
-        self.html_body_template = Template('{{ html }}')
+        self.html_body_template = get_template('body.html')
 
         self.context_dict['html'] = self.html_body
         self.context['html'] = self.html_body
@@ -203,14 +203,14 @@ class TemplatedHTMLEmailMessageViewTestCase(TemplatedEmailMessageViewTestCase):
 
     def test_html_body_template(self):
         self.message.html_body_template = self.html_body_template
-        self.assertEqual(self.render_html_body(), self.html_body)
+        self.assertEqual(self.render_html_body(), "html body\n")
 
     def test_render_to_message(self):
         self.add_templates_to_message()
         message = self.message.render_to_message(self.context_dict)
         self.assertEqual(message.subject, self.subject)
-        self.assertEqual(message.body, self.body)
-        self.assertEqual(message.alternatives, [(self.html_body, 'text/html')])
+        self.assertEqual(message.body, "body\n")
+        self.assertEqual(message.alternatives, [("html body\n", 'text/html')])
 
     def test_send(self):
         self.add_templates_to_message()

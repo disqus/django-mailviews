@@ -1,6 +1,5 @@
 from django.core.exceptions import ImproperlyConfigured
 from django.core.mail.message import EmailMessage, EmailMultiAlternatives
-from django.template import Context
 from django.template.loader import get_template, select_template
 
 from mailviews.utils import unescape
@@ -34,7 +33,7 @@ class EmailMessageView(object):
 
         :rtype: :class:`django.template.Context`
         """
-        return Context(kwargs)
+        return kwargs
 
     def render_to_message(self, extra_context=None, **kwargs):
         """
