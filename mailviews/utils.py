@@ -37,4 +37,4 @@ def unescape(context):
     Useful for rendering plain-text templates without having to wrap the entire
     template in an `{% autoescape off %}` tag.
     """
-    return Context(context, autoescape=False)
+    return context

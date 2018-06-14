@@ -5,8 +5,8 @@ from mailviews.messages import (TemplatedEmailMessageView,
 
 
 class TemplateContextMixin(object):
-    subject_template = Template('{{ subject }}')
-    body_template = Template('{{ content }}')
+    subject_template_name = 'subject.txt'
+    body_template_name = 'body.txt'
 
     def __init__(self, subject, content):
         self.subject = subject
@@ -26,4 +26,4 @@ class BasicEmailMessageView(TemplateContextMixin, TemplatedEmailMessageView):
 
 
 class BasicHTMLEmailMessageView(TemplateContextMixin, TemplatedHTMLEmailMessageView):
-    html_body_template = Template('{{ content|linebreaks }}')
+    html_body_template_name = 'content.html'
