@@ -70,6 +70,7 @@ class TemplatedEmailMessageViewTestCase(EmailMessageViewTestCase):
         self.subject_template = get_template('subject.txt')
 
         self.body = 'body'
+        self.expected_body = 'body\n'
         self.body_template = get_template('body.txt')
 
         self.context_dict = {
@@ -127,17 +128,17 @@ class TemplatedEmailMessageViewTestCase(EmailMessageViewTestCase):
         self.assertTemplateExists(template)
 
         self.message.body_template_name = template
-        self.assertEqual(self.render_body(), self.body + '\n')
+        self.assertEqual(self.render_body(), self.expected_body)
 
     def test_body_template(self):
         self.message.body_template = self.body_template
-        self.assertEqual(self.render_body(), "body\n")
+        self.assertEqual(self.render_body(), self.expected_body)
 
     def test_render_to_message(self):
         self.add_templates_to_message()
         message = self.message.render_to_message(self.context_dict)
         self.assertEqual(message.subject, self.subject)
-        self.assertEqual(message.body, "body\n")
+        self.assertEqual(message.body, self.expected_body)
 
     def test_send(self):
         self.add_templates_to_message()
@@ -167,6 +168,7 @@ class TemplatedHTMLEmailMessageViewTestCase(TemplatedEmailMessageViewTestCase):
         super(TemplatedHTMLEmailMessageViewTestCase, self).setUp()
 
         self.html_body = 'html body'
+        self.expected_html_body = 'html body\n'
         self.html_body_template = get_template('body.html')
 
         self.context_dict['html'] = self.html_body
@@ -203,14 +205,14 @@ class TemplatedHTMLEmailMessageViewTestCase(TemplatedEmailMessageViewTestCase):
 
     def test_html_body_template(self):
         self.message.html_body_template = self.html_body_template
-        self.assertEqual(self.render_html_body(), "html body\n")
+        self.assertEqual(self.render_html_body(), self.expected_html_body)
 
     def test_render_to_message(self):
         self.add_templates_to_message()
         message = self.message.render_to_message(self.context_dict)
         self.assertEqual(message.subject, self.subject)
-        self.assertEqual(message.body, "body\n")
-        self.assertEqual(message.alternatives, [("html body\n", 'text/html')])
+        self.assertEqual(message.body, self.expected_body)
+        self.assertEqual(message.alternatives, [(self.expected_html_body, 'text/html')])
 
     def test_send(self):
         self.add_templates_to_message()
