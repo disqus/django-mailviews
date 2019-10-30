@@ -5,7 +5,7 @@ from collections import namedtuple
 from email.header import decode_header
 
 import django
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import Http404
 from django.shortcuts import render
 
