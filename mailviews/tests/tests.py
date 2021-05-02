@@ -3,11 +3,11 @@ import os
 
 from django.core.exceptions import ImproperlyConfigured
 from django.core import mail
-from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.client import Client
 from django.template import Context, Template, TemplateDoesNotExist
 from django.template.loader import get_template
+from django.urls import reverse
 
 from mailviews.messages import (TemplatedEmailMessageView,
                                 TemplatedHTMLEmailMessageView)

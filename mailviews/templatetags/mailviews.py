@@ -14,7 +14,7 @@ def mailviews_static(path):
         from django.contrib.staticfiles.templatetags import staticfiles
         return staticfiles.static(path)
     else:
-        from django.core.urlresolvers import reverse
+        from django.urls import reverse
         return reverse('%s:static' % URL_NAMESPACE, kwargs={
             'path': path,
         })

@@ -5,9 +5,9 @@ from collections import namedtuple
 from email.header import decode_header
 
 import django
-from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.shortcuts import render
+from django.urls import reverse
 
 try:
     from collections import OrderedDict
@@ -90,7 +90,7 @@ class PreviewSite(object):
             ]
 
             urlpatterns += url_staticsfiles
-            
+
         return include(urlpatterns, namespace=URL_NAMESPACE)
 
     def list_view(self, request):
