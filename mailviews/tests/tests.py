@@ -5,7 +5,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.core import mail
 from django.test import TestCase
 from django.test.client import Client
-from django.template import Context, Template, TemplateDoesNotExist
+from django.template import Template, TemplateDoesNotExist
 from django.template.loader import get_template
 from django.urls import reverse
 
@@ -77,7 +77,7 @@ class TemplatedEmailMessageViewTestCase(EmailMessageViewTestCase):
             'body': self.body,
         }
 
-        self.context = Context(self.context_dict)
+        self.context = self.context_dict
 
         self.render_subject = functools.partial(self.message.render_subject,
             context=self.context)
